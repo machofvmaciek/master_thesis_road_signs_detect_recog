@@ -41,7 +41,7 @@ class Detector:
 
                 if self.ignore_tiny:
                     # Filter out very small detections
-                    if x2-x1 < 30 or y2-y1 < 30:
+                    if x2-x1 < 15 or y2-y1 < 15:
                         continue
 
                 # Convert to Integer for Cropping
