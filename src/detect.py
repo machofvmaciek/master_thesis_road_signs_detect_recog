@@ -23,9 +23,12 @@ class Detector:
     
     def detect_yolo(self, PATH_IMAGE):
         model = self.__get_model("YOLO")
-
+        
         img = cv2.imread(f"{PATH_IMAGE}")
-
+        if img is None:
+            raise IOError(f"Failed to open '{PATH_IMAGE}' image.")
+        
+        # raise NoDetectionsException
         # [0] to get only boxes
         results = model(img, device="mps")[0]
 
