@@ -10,13 +10,16 @@ MODEL_TYPE = "YOLO"
 # PATH_MODEL = "/Users/machofv/Projects/road_signs_binary_classification/application/resources/models/YOLO/best_kuba.pt"
 PATH_MODEL = f"{os.path.dirname(__file__)}/../resources/models/YOLO/best_kuba.pt"
 
+THRESHOLD_CONFIDENCE = 0.5
+
 class NoDetectionsException(Exception):
     """Raised where nothing was detected."""
 
 class Detector:
-    def __init__(self, ignore_tiny = True):
+    def __init__(self, ignore_tiny = True, ignore_unconfident = True):
         self.PATH_MODEL = {"YOLO": Path(PATH_MODEL)}
         self.ignore_tiny = ignore_tiny
+        self.ignore_unconfident = ignore_unconfident
     
     def __get_model(self, model_name: str):
         return YOLO(self.PATH_MODEL.get(model_name))
@@ -28,8 +31,7 @@ class Detector:
         if img is None:
             raise IOError(f"Failed to open '{PATH_IMAGE}' image.")
         
-        # raise NoDetectionsException
-        # [0] to get only boxes
+        # [0] as we're passing only one image at the time
         results = model(img, device="mps")[0]
 
         if not results:
@@ -39,6 +41,11 @@ class Detector:
 
         for result in results:
             for box in result.boxes:
+                # Filter out unconfident detections
+                if self.ignore_unconfident:
+                    if box.conf.item() < THRESHOLD_CONFIDENCE:
+                        continue
+
                 # Extract Bounding Box Coordinates
                 x1, y1, x2, y2 = box.xyxy[0]
 
@@ -50,11 +57,7 @@ class Detector:
                 # Convert to Integer for Cropping
                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
-                # Crop and Display
+                # Crop
                 cropped_imgs.append(img[y1:y2, x1:x2])
-
-                # Display Cropped Image (Optional)
-                # cv2.imshow("Cropped Image", cropped_img)
-                # cv2.waitKey(0)
 
         return cropped_imgs
