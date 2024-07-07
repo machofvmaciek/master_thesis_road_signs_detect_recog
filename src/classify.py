@@ -14,7 +14,8 @@ from tensorflow.keras.models import load_model # type: ignore
 # PATH_MODEL = "/Users/machofv/Projects/road_signs_binary_classification/application/resources/models/CNN/TSR.h5"
 # PATH_JSON_CLASSES = "/Users/machofv/Projects/road_signs_binary_classification/application/resources/configs/classes_gtsrb.json"
 
-PATH_MODEL = f"{os.path.dirname(__file__)}/../resources/models/CNN/cnn_v8_ep_18.h5"
+PATH_MODEL = f"{os.path.dirname(__file__)}/../resources/models/CNN/TSR.h5"
+# PATH_MODEL = f"{os.path.dirname(__file__)}/../resources/models/CNN/cnn_v8_ep_18.h5"
 PATH_JSON_CLASSES = f"{os.path.dirname(__file__)}/../resources/configs/classes_gtsrb.json"
 
 DEFAULT_IMAGE_SHAPE = (None, 64, 64, 3)
@@ -58,8 +59,8 @@ class Classifier:
             return img
 
         # return np.expand_dims(resize_and_pad(img), axis=0)
-        return np.expand_dims(cv2.resize(img, (64, 64)), axis=0)
-        # return np.expand_dims(cv2.resize(img, (30, 30)), axis=0)    # TSR.h5
+        # return np.expand_dims(cv2.resize(img, (64, 64)), axis=0)
+        return np.expand_dims(cv2.resize(img, (30, 30)), axis=0)    # TSR.h5
     
     
     def __get_class_name(self, id):
