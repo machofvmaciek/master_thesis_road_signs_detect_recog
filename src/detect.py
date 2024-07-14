@@ -10,7 +10,7 @@ MODEL_TYPE = "YOLO"
 # PATH_MODEL = "/Users/machofv/Projects/road_signs_binary_classification/application/resources/models/YOLO/best_kuba.pt"
 PATH_MODEL = f"{os.path.dirname(__file__)}/../resources/models/YOLO/best_kuba.pt"
 
-THRESHOLD_CONFIDENCE = 0.5
+THRESHOLD_CONFIDENCE = 0.6
 
 class NoDetectionsException(Exception):
     """Raised where nothing was detected."""
